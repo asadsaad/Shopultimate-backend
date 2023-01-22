@@ -7,6 +7,7 @@ const productRoutes = require("./Routes/productRoutes");
 const cartRoutes = require("./Routes/cartRoutes");
 const shopRoutes = require("./Routes/shopRoutes");
 const AddressRoutes = require("./Routes/DeliveryAddressRoutes");
+require("dotenv").config();
 
 const catageryRoutes = require("./Routes/catageryRoutes");
 const orderRoutes = require("./Routes/orderRoutes");
@@ -32,14 +33,11 @@ app.use("/profile", profileRoutes);
 // app.use("/order", orderRoutes);
 
 mongoose
-  .connect(
-    "mongodb+srv://asadsaad:123ASasd@cluster0.nx9gnlq.mongodb.net/?retryWrites=true&w=majority",
-    { useNewUrlParser: true }
-  )
+  .connect(process.env.DATABASE_PATH, { useNewUrlParser: true })
   .then(() => {
     console.log("db connected");
   });
-
-app.listen(5000, function () {
-  console.log("app running on 5000");
+const port = process.env.PORT || 5000;
+app.listen(port, function () {
+  console.log(`app running on ${port}`);
 });

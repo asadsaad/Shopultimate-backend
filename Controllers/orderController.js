@@ -3,9 +3,7 @@ const Order = require("../models/orderModel");
 const Payment = require("../models/payment");
 const Shop = require("../models/shopModel");
 const moment = require("moment");
-const stripe = require("stripe")(
-  "sk_test_51IIqvWEeXLQyBq0SFUoiCcsUTvEVJnKtW14RDPeyzoHamL7Tp5azMXpTmuy1qwxbVeF1Mn6qXkNgLxs8IBKLAAI400QZmA3RJ6"
-);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 exports.initorder = async (req, res) => {
   const { deliverydetails, cartids, paymentid, amount } = req.body;

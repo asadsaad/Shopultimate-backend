@@ -5,9 +5,9 @@ const Cart = require("../models/cartModel");
 var nodemailer = require("nodemailer");
 const Profile = require("../models/profileModel");
 
-const accountSid = "AC92215b8200a05164eb11679e579a6674";
-const authToken = "9e6bcf317888cd37175093e11b8e09d6";
-const client = require("twilio")(accountSid, authToken);
+// const accountSid = "AC92215b8200a05164eb11679e579a6674";
+// const authToken = "9e6bcf317888cd37175093e11b8e09d6";
+// const client = require("twilio")(accountSid, authToken);
 
 var transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -158,7 +158,7 @@ exports.login = async (req, res) => {
     if (user) {
       const compare = await bcrypt.compare(password, user.password);
       if (compare) {
-        const token = jwt.sign({ _id: user._id }, "JWT_SECRET");
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
         return res
           .status(200)
           .json({ success: true, message: "Login Success", data: user, token });
