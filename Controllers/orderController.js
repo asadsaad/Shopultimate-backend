@@ -140,8 +140,10 @@ exports.selleracount = async (req, res) => {
       const user_ = await user.save();
       const accountLink = await stripe.accountLinks.create({
         account: user_.stripeid,
-        refresh_url: "http://localhost:3000/dashboard/payouts",
-        return_url: "http://localhost:3000/dashboard/payouts",
+        refresh_url:
+          "https://shop-ultimate-client-8jhrz2kov-asadsaad.vercel.app/dashboard/payouts",
+        return_url:
+          "https://shop-ultimate-client-8jhrz2kov-asadsaad.vercel.app/dashboard/payouts",
         type: "account_onboarding",
       });
       return res
