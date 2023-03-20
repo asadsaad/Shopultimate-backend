@@ -288,7 +288,7 @@ exports.becomeaseller = async (req, res) => {
     console.log(email);
     if (email) {
       let user_ = await User.findByIdAndUpdate(
-        { _id: req.user },
+        { _id: req.user._id },
         { seller_request: true },
         { new: true }
       );
