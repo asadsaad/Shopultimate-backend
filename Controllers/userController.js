@@ -284,46 +284,62 @@ exports.becomeaseller = async (req, res) => {
   try {
     const user = req.user;
 
-    const email = req.body.email ? req.body.email : req.user.email;
-    const key = random(5);
-
-    user.verifyemailtoken = key;
-    await user.save();
-    const mail = await transporter.sendMail({
-      to: email,
-      from: "no-replay@insta.com",
-      subject: "Seller Varification",
-      html: `
-            <p>yout email otp is ${key}</p>
-            `,
-    });
-    if (mail) {
-      return res.status(200).json({
-        success: true,
-        message: "Otp has been sent to your email",
-      });
+    const email = req.user.email;
+    console.log(email);
+    if (email) {
+      let user_ = await User.findByIdAndUpdate(
+        { _id: req.user },
+        { seller_request: true },
+        { new: true }
+      );
+      return res.status(200).json({ user: user_ });
     }
+    return res.status(400).json({ message: "somethng went wrong" });
+    // const key = random(5);
+
+    // user.verifyemailtoken = key;
+    // await user.save();
+    // const mail = await transporter.sendMail({
+    //   to: email,
+    //   from: "no-replay@insta.com",
+    //   subject: "Seller Varification",
+    //   html: `
+    //         <p>yout email otp is ${key}</p>
+    //         `,
+    // });
+    // if (mail) {
+    //   return res.status(200).json({
+    //     success: true,
+    //     message: "Otp has been sent to your email",
+    //   });
+    // }
   } catch (error) {
     console.log(error);
   }
 };
 
 exports.emailverify = async (req, res) => {
-  const { otp } = req.body;
-  const user = req.user;
+  // const { otp } = req.body;
+  // const user = req.user;
   try {
-    if (!otp) {
-      return res.status(400).json({ message: "Please Enter Otp" });
-    }
-    if (user.verifyemailtoken == otp) {
-      const user_ = await User.findByIdAndUpdate(
-        { _id: req.user.id },
-        { isverifiedemail: true, role: "seller", verifyemailtoken: "" },
-        { new: true }
-      );
-      return res.status(200).json({ message: "You are Seller Now", user_ });
-    }
-    return res.status(400).json({ message: "Something Went Wrong" });
+    const { id } = req.body;
+    const user_ = await User.findByIdAndUpdate(
+      { _id: id },
+      { isverifiedemail: true, role: "seller", verifyemailtoken: "" },
+      { new: true }
+    );
+    // if (!otp) {
+    //   return res.status(400).json({ message: "Please Enter Otp" });
+    // }
+    // if (user.verifyemailtoken == otp) {
+    //   const user_ = await User.findByIdAndUpdate(
+    //     { _id: req.user.id },
+    //     { isverifiedemail: true, role: "seller", verifyemailtoken: "" },
+    //     { new: true }
+    //   );
+    //   return res.status(200).json({ message: "You are Seller Now", user_ });
+    // }
+    return res.status(400).json({ message: "Seller Approved", user: user_ });
   } catch (error) {
     console.log(error);
   }

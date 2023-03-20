@@ -40,6 +40,10 @@ const userModel = new mongoose.Schema({
   stripeaccount: {
     type: Object,
   },
+  seller_request: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("Users", userModel);
