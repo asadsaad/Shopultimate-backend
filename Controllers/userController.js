@@ -339,7 +339,7 @@ exports.emailverify = async (req, res) => {
     //   );
     //   return res.status(200).json({ message: "You are Seller Now", user_ });
     // }
-    return res.status(400).json({ message: "Seller Approved", user: user_ });
+    return res.status(200).json({ message: "Seller Approved", user: user_ });
   } catch (error) {
     console.log(error);
   }
