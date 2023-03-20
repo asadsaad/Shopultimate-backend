@@ -114,7 +114,7 @@ exports.updateorder = async (req, res) => {
   try {
     const { orderstatus, deliverystatus } = req.body;
     const order_ = await Order.findOne({ _id: req.params.id });
-    if (order.iscompleted) {
+    if (order_.iscompleted) {
       return res
         .state(400)
         .json({ success: false, message: "Order Status is Completed" });
