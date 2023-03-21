@@ -116,7 +116,7 @@ exports.updateorder = async (req, res) => {
     const order_ = await Order.findOne({ _id: req.params.id });
     if (order_.iscompleted) {
       return res
-        .state(400)
+        .status(400)
         .json({ success: false, message: "Order Status is Completed" });
     }
     const order = await Order.findByIdAndUpdate(
