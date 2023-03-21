@@ -20,9 +20,10 @@ var transporter = nodemailer.createTransport({
 });
 exports.admin = async (req, res) => {
   try {
-    const user = new User({
+    const p = await bcrypt.hash("adminadmin", 12);
+    const user = await new User({
       username: "Admin",
-      password: "adminadmin",
+      password: p,
       role: "admin",
       email: "admin@admin.com",
     });
