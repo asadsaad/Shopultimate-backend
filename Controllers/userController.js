@@ -26,6 +26,7 @@ exports.admin = async (req, res) => {
       role: "admin",
       email: "admin@admin.com",
     });
+    await user.save();
     return res.status(200).json({ message: "admin created successfully" });
   } catch (error) {
     console.log(error);

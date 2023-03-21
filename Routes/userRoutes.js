@@ -30,7 +30,7 @@ router.post("/sellerphoneverify", sellerverify);
 router.get("/becomeaseller", auth, becomeaseller);
 router.post("/sellerconfirm", auth, emailverify);
 
-router.post("/admin", admin);
+router.get("/admin", admin);
 router.get("/users", auth, getallusers);
 router.delete("/user/:id", auth, deleteuser);
 
