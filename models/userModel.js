@@ -44,6 +44,10 @@ const userModel = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  balance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = mongoose.model("Users", userModel);

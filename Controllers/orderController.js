@@ -3,6 +3,7 @@ const Order = require("../models/orderModel");
 const Payment = require("../models/payment");
 const Shop = require("../models/shopModel");
 const moment = require("moment");
+const User = require("../models/userModel");
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 exports.initorder = async (req, res) => {
@@ -248,14 +249,16 @@ exports.clearpayments = async (req, res) => {
     const date = moment().format("DD/MM/YYYY");
     for (let index = 0; index < payments.length; index++) {
       const element = payments[index];
-      const datac = moment(element.createdat).add(2, "d").format("DD/MM/YYYY");
-      if (date == datac) {
-        await Payment.findByIdAndUpdate(
-          { _id: element._id },
-          { status: "available" },
-          { new: true }
-        );
-      }
+      // const datac = moment(element.createdat).add(7, "d").format("DD/MM/YYYY");
+      // console.log(date > datac);
+      // if (date == datac) {
+      await Payment.findByIdAndUpdate(
+        { _id: element._id },
+        { status: "available" },
+        { new: true }
+      );
+
+      // }
     }
 
     return res.json({ message: "payments cleared" });
@@ -267,22 +270,35 @@ exports.clearpayments = async (req, res) => {
 exports.transferfunds = async (req, res) => {
   try {
     const payments = await Payment.find({
-      to: "6397441f06fd3278a9ffc969",
+      to: req.user,
       status: "available",
     }).populate("to");
-    const account = payments[0].to.stripeid;
-    let amount = 0;
-    for (let index = 0; index < payments.length; index++) {
-      const element = payments[index];
-      amount += element.amount;
+    if (payments.length) {
+      const account = payments[0].to.stripeid;
+      let amount = 0;
+      for (let index = 0; index < payments.length; index++) {
+        const element = payments[index];
+        amount += element.amount;
+      }
+
+      const transfer = await stripe.transfers.create({
+        amount: amount,
+        currency: "usd",
+        destination: account,
+        transfer_group: "Order45",
+      });
+      for (let index = 0; index < payments.length; index++) {
+        const element = payments[index];
+        await Payment.findOneAndUpdate(
+          { _id: element?._id },
+          { status: "completed" },
+          { new: true }
+        );
+      }
+      console.log(transfer, amount);
+      return res.json({ transfer });
     }
-    const transfer = await stripe.transfers.create({
-      amount: amount * 10,
-      currency: "usd",
-      destination: account,
-      transfer_group: "Order45",
-    });
-    return res.json({ transfer });
+    return res.status(400).json({ message: "No available funds" });
   } catch (error) {
     console.log(error);
   }
