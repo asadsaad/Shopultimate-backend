@@ -142,9 +142,8 @@ exports.selleracount = async (req, res) => {
       const accountLink = await stripe.accountLinks.create({
         account: user_.stripeid,
         refresh_url:
-          "https://shop-ultimate-client-8jhrz2kov-asadsaad.vercel.app/dashboard/payouts",
-        return_url:
-          "https://shop-ultimate-client-8jhrz2kov-asadsaad.vercel.app/dashboard/payouts",
+          "https://shop-ultimate-client.vercel.app/dashboard/payouts",
+        return_url: "https://shop-ultimate-client.vercel.app/dashboard/payouts",
         type: "account_onboarding",
       });
       return res
@@ -160,8 +159,8 @@ exports.selleracount = async (req, res) => {
     }
     const accountLink = await stripe.accountLinks.create({
       account: user.stripeid,
-      refresh_url: "http://localhost:3000/dashboard/payouts",
-      return_url: "http://localhost:3000/dashboard/payouts",
+      refresh_url: "https://shop-ultimate-client.vercel.app/dashboard/payouts",
+      return_url: "https://shop-ultimate-client.vercel.app/dashboard/payouts",
       type: "account_onboarding",
     });
     return res.status(200).json({
